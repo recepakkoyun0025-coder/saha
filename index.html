@@ -10,35 +10,39 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="LezJet Saha">
+<link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
 <style>
 /* VOICE: warm, plain-spoken shopkeeper talk; confident, never pushy
-   IDEA: the field rep's tablet folder: tabbed pages the rep turns while the esnaf answers
-   PICTURE: live cost comparison bars built from the esnaf's own numbers; real store screenshots
-   COLOUR and TYPE: LezJet navy + orange from the brochures, white panels; Archivo 800/500
+   IDEA: the field rep's tablet folder: tabbed pages turned while the esnaf answers, ending in a filed visit card
+   PICTURE: live cost bars from the esnaf's own numbers; real store screenshots
+   COLOUR and TYPE: LezJet navy + orange, white panels; Archivo 800/500
    LAYOUT: phone-first single column, sticky step header, sticky bottom nav */
 :root{color-scheme:light dark;
 --bg:light-dark(#eef1f7,#0c1430);--panel:light-dark(#ffffff,#142049);--ink:light-dark(#0f1b3d,#eef1fb);
 --soft:light-dark(#5a6482,#a8b2d4);--line:light-dark(#dde2ee,#26336a);--navy:light-dark(#173a8e,#6f8ff0);
---navyBg:#173a8e;--or:#f26a1b;--orSoft:light-dark(#fff1e8,#3a2313);--ok:light-dark(#11804a,#4fd08d);--okSoft:light-dark(#e6f6ee,#123526)}
+--navyBg:#173a8e;--or:#f26a1b;--orSoft:light-dark(#fff1e8,#3a2313);--ok:light-dark(#11804a,#4fd08d);--okSoft:light-dark(#e6f6ee,#123526);--bad:light-dark(#b3261e,#ff8a80)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Archivo,system-ui,sans-serif;overflow-x:clip}
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--or);outline-offset:2px}
+[hidden]{display:none!important}
 .top{position:sticky;top:0;z-index:5;background:var(--navyBg);color:#fff;padding:calc(10px + env(safe-area-inset-top)) max(16px,calc(50% - 320px)) 0}
-.brand{display:flex;align-items:center;gap:10px;justify-content:space-between}
-.logo{font-weight:800;font-size:22px;letter-spacing:-.5px;display:flex;align-items:center;gap:6px}
-.logo i{width:24px;height:24px;border-radius:50%;border:4px solid var(--or);border-right-color:#fff;display:inline-block}
-.logo b{color:var(--or);font-weight:800}
-.tip{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:999px;padding:8px 14px;min-height:40px;font-weight:600;font-size:14px;cursor:pointer}
+.brand{display:flex;align-items:center;gap:8px}
+.logo{display:flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:5px 14px 5px 8px;margin-right:auto}
+.logo svg{width:30px;height:30px;flex:none}
+.logo span{font-weight:800;font-style:italic;font-size:22px;letter-spacing:-.5px;color:#f26a1b;line-height:1}
+.logo b{color:#1d4fb8;font-weight:800}
+.tip{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:999px;padding:8px 14px;min-height:42px;font-weight:600;font-size:14px;cursor:pointer;position:relative}
+.tip .dot{position:absolute;top:2px;right:2px;min-width:18px;height:18px;border-radius:9px;background:var(--or);font-size:11px;display:grid;place-items:center;padding:0 4px}
 .steps{display:flex;gap:6px;overflow-x:auto;padding:10px 0;scrollbar-width:none}
 .steps::-webkit-scrollbar{display:none}
 .steps button{flex:none;border:0;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.1);color:#c9d4f5;cursor:pointer;min-height:34px}
-.steps button.on{background:var(--or);color:#fff}
-.steps button.done{color:#fff}
+.steps button.on{background:var(--or);color:#fff}.steps button.done{color:#fff}
+.prog{height:4px;background:rgba(255,255,255,.15)}.prog i{display:block;height:100%;background:var(--or);transition:width .3s}
 main{max-width:640px;margin:0 auto;padding:20px 16px 120px}
 h1{font-size:clamp(30px,8vw,44px);line-height:1.05;margin:0 0 12px;font-weight:800;text-wrap:balance;letter-spacing:-.5px}
 h2{font-size:clamp(24px,6vw,30px);line-height:1.1;margin:0 0 8px;font-weight:800;text-wrap:balance}
@@ -47,21 +51,22 @@ p{margin:0 0 12px}.lead{font-size:17px;color:var(--soft)}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0}
 label.f{display:block;font-weight:700;margin:16px 0 6px}
 .hint{font-size:14px;color:var(--soft);font-weight:500}
-input[type=text],input[type=date],input[type=tel],textarea,select{width:100%;font-size:17px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);min-height:48px}
+input[type=text],input[type=date],input[type=tel],input[type=url],textarea{width:100%;font-size:17px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);min-height:48px}
 textarea{min-height:84px;resize:vertical}
 .num{position:relative}.num input{padding-right:52px;text-align:right;font-weight:700;font-size:20px}
 .num span{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--soft);font-weight:700}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{border:1.5px solid var(--line);background:var(--panel);border-radius:999px;padding:10px 16px;min-height:44px;font-weight:600;cursor:pointer}
 .chip.on{background:var(--navyBg);border-color:var(--navyBg);color:#fff}
+.req{color:var(--or)}
+.need{outline:3px solid var(--or);border-radius:12px}
 .pains{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:10px}
 .pain{text-align:left;border:1.5px solid var(--line);background:var(--panel);border-radius:16px;padding:14px 16px;cursor:pointer;min-height:64px;display:flex;gap:12px;align-items:center;font-weight:600}
 .pain .bx{flex:none;width:26px;height:26px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;color:#fff;font-size:16px}
-.pain.on{border-color:var(--or);background:var(--orSoft)}
-.pain.on .bx{background:var(--or);border-color:var(--or)}
-.hero{background:var(--navyBg);color:#fff;border-radius:22px;padding:24px 20px;margin:0 0 14px;position:relative;overflow:hidden}
+.pain.on{border-color:var(--or);background:var(--orSoft)}.pain.on .bx{background:var(--or);border-color:var(--or)}
+.hero{background:var(--navyBg);color:#fff;border-radius:22px;padding:24px 20px;margin:0 0 14px}
 .hero h1{color:#fff}.hero p{color:#d6def7}
-.hero .camp{display:inline-block;margin-bottom:8px;background:var(--or);color:#fff;font-weight:700;font-size:14px;border-radius:999px;padding:6px 12px;margin-top:6px}
+.hero .camp{display:inline-block;background:var(--or);color:#fff;font-weight:700;font-size:14px;border-radius:999px;padding:6px 12px;margin:6px 0 8px}
 .hero .big{font-size:clamp(52px,16vw,84px);font-weight:800;line-height:.9;color:var(--or)}
 .hero .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
 .hero .row div{background:rgba(255,255,255,.1);border-radius:12px;padding:10px;font-size:13px;line-height:1.25;font-weight:600}
@@ -69,27 +74,23 @@ textarea{min-height:84px;resize:vertical}
 .btn{border:0;border-radius:14px;min-height:52px;padding:12px 20px;font-weight:700;font-size:17px;cursor:pointer;background:var(--or);color:#fff}
 .btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
 .btn.small{min-height:44px;font-size:15px;padding:8px 14px}
+.btn.wide{width:100%}
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--panel);border-top:1px solid var(--line);padding:10px max(16px,calc(50% - 320px)) calc(10px + env(safe-area-inset-bottom))}
-.bar .in{display:flex;gap:10px;align-items:center}
-.bar .btn{flex:1}.bar .ghost{flex:0 0 auto}
-.prog{height:4px;background:rgba(255,255,255,.15)}.prog i{display:block;height:100%;background:var(--or);transition:width .3s}
+.bar .in{display:flex;gap:10px;align-items:center}.bar .btn{flex:1}.bar .ghost{flex:0 0 auto}
 .res{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0}
 .res .verdict{font-size:clamp(22px,6vw,28px);font-weight:800;line-height:1.15;margin-bottom:12px}
-.res .verdict em{font-style:normal;color:var(--ok)}
-.res .verdict em.neg{color:var(--or)}
+.res .verdict em{font-style:normal;color:var(--ok)}.res .verdict em.neg{color:var(--or)}
 .cmp{display:grid;gap:12px}
-.cmp .lb{display:flex;justify-content:space-between;gap:8px;font-weight:600;font-size:15px}
-.cmp .lb b{white-space:nowrap}
+.cmp .lb{display:flex;justify-content:space-between;gap:8px;font-weight:600;font-size:15px}.cmp .lb b{white-space:nowrap}
 .track{height:28px;border-radius:8px;background:var(--bg);overflow:hidden}
 .track i{display:block;height:100%;border-radius:8px;transition:width .4s}
 .kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
 .kv div{background:var(--bg);border-radius:12px;padding:12px}
-.kv small{display:block;color:var(--soft);font-weight:600;font-size:13px}
-.kv b{font-size:20px;white-space:nowrap}
+.kv small{display:block;color:var(--soft);font-weight:600;font-size:13px}.kv b{font-size:20px;white-space:nowrap}
 .warn{background:var(--orSoft);border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600;margin-top:12px}
+.okbox{background:var(--okSoft);border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600;margin-top:12px}
 .note{font-size:13px;color:var(--soft);margin-top:10px}
-.flow{display:grid;gap:8px}
-.flow .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.flow{display:grid;gap:8px}.flow .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .node{background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:12px;font-weight:700;line-height:1.25}
 .node small{display:block;font-weight:500;color:var(--soft);font-size:13px;margin-top:4px}
 .node.n{background:var(--navyBg);color:#fff;border-color:var(--navyBg)}.node.n small{color:#cdd7f6}
@@ -98,51 +99,60 @@ textarea{min-height:84px;resize:vertical}
 .gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding-bottom:6px;scrollbar-width:thin}
 .gal figure{flex:0 0 100%;scroll-snap-align:start;margin:0;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .gal img{width:100%;display:block;background:#fff;cursor:zoom-in;aspect-ratio:1422/713;object-fit:contain}
-.gal figure.tall img{aspect-ratio:auto;max-height:70vh;object-fit:contain}
 .gal figcaption{padding:12px 14px}
 .gal figcaption q{display:block;font-weight:700;margin-top:6px;quotes:"“" "”"}
 .galnav{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px}
-.tabs{display:flex;gap:8px;margin:10px 0}
 .feat{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:10px}
 .feat div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
 .feat h3{font-size:16px}.feat p{font-size:15px;color:var(--soft);margin:0}
 .ans{border-left:4px solid var(--or);background:var(--panel);border-radius:0 14px 14px 0;padding:14px 16px;margin:10px 0}
 .ans h3{font-size:16px;color:var(--soft);font-weight:600}
-.ans p{margin:4px 0 0;font-weight:600;font-size:17px}
-.split{display:flex;height:64px;border-radius:12px;overflow:hidden;font-weight:700;font-size:14px;color:#fff}
-.split div{display:flex;align-items:center;justify-content:center;text-align:center;padding:4px;line-height:1.15}
+.ans p{margin:4px 0 10px;font-weight:600;font-size:17px}
+.react{display:flex;flex-wrap:wrap;gap:6px}
+.react .chip{min-height:40px;padding:8px 12px;font-size:14px}
+.react .chip.on.r-ikna{background:var(--ok);border-color:var(--ok)}
+.react .chip.on.r-hayir{background:var(--bad);border-color:var(--bad)}
+.react .chip.on.r-kararsiz{background:var(--soft);border-color:var(--soft)}
 table{width:100%;border-collapse:collapse;font-size:15px}
 th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-size:13px;color:var(--soft)}
-td.r{text-align:right;white-space:nowrap;font-weight:700}
 details{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin:10px 0}
+details.asked{border-color:var(--or)}
 summary{padding:16px;font-weight:700;cursor:pointer;min-height:52px;list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
 summary::after{content:"+";color:var(--or);font-size:22px;line-height:1}
 details[open] summary::after{content:"–"}
 details>div{padding:0 16px 16px}
 .steplist{counter-reset:s;list-style:none;padding:0;margin:0}
 .steplist li{counter-increment:s;position:relative;padding:0 0 16px 46px}
 .steplist li::before{content:counter(s);position:absolute;left:0;top:-2px;width:32px;height:32px;border-radius:50%;background:var(--navyBg);color:#fff;display:grid;place-items:center;font-weight:800}
-.visit{border-top:1px solid var(--line);padding:12px 0;display:flex;gap:8px;align-items:center;justify-content:space-between}
+.visit{border-top:1px solid var(--line);padding:12px 0;display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .visit div{font-size:14px}.visit b{display:block;font-size:16px}
+.tag{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:4px}
+.tag.s{background:var(--okSoft);color:var(--ok)}.tag.w{background:var(--orSoft);color:var(--or)}
 .sheet{position:fixed;inset:0;z-index:20;background:rgba(5,10,30,.55);display:none;align-items:flex-end;justify-content:center}
 .sheet.on{display:flex}
-.sheet .box{background:var(--panel);width:min(640px,100%);border-radius:22px 22px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));max-height:80vh;overflow:auto}
+.sheet .box{background:var(--panel);width:min(640px,100%);border-radius:22px 22px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
 .sheet .box h3{color:var(--or)}
 .lb2{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;padding:12px}
 .lb2.on{display:flex}.lb2 img{max-width:100%;max-height:100%;border-radius:8px;background:#fff}
-.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:700;opacity:0;transition:opacity .2s;z-index:40;pointer-events:none}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:700;opacity:0;transition:opacity .2s;z-index:40;pointer-events:none;max-width:90vw;text-align:center}
 .toast.on{opacity:1}
+.stores{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.stores a{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;border-radius:12px;background:var(--ink);color:var(--bg);font-weight:700;text-decoration:none}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:600;margin-top:16px}
+.check input{width:24px;height:24px;flex:none;margin-top:2px}
 .mt{margin-top:18px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
-@media(max-width:400px){.hero .row{grid-template-columns:1fr}.kv{grid-template-columns:1fr}}
+@media(max-width:400px){.tip{padding:8px 10px;font-size:13px}.logo{padding:4px 10px 4px 6px}.logo span{font-size:19px}.logo svg{width:26px;height:26px}.hero .row{grid-template-columns:1fr}.kv{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="brand">
-    <div class="logo"><i></i><span>Lez<b>Jet</b></span></div>
+    <div class="logo" aria-label="LezJet"><svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="15"><path d="M22.1 69.5A34 34 0 0 1 67 20.6" stroke="#1d4fb8"/><path d="M77.9 30.5A34 34 0 0 1 33 79.4" stroke="#f26a1b"/></g><path d="M74 8.5L81.6 29.1L60 32.7Z" fill="#1d4fb8"/><path d="M26 91.5L18.4 70.9L40 67.3Z" fill="#f26a1b"/></svg><span>Lez<b>Jet</b></span></div>
     <button class="tip" id="tipBtn" type="button">Saha notu</button>
+    <button class="tip" id="setBtn" type="button" aria-label="Kayıtlar ve ayarlar">Kayıtlar<span class="dot" id="qDot" hidden></span></button>
   </div>
   <nav class="steps" id="steps" aria-label="Bölümler"></nav>
   <div class="prog"><i id="prog"></i></div>
@@ -153,22 +163,25 @@ details>div{padding:0 16px 16px}
   <button class="btn" id="next" type="button">İleri</button>
 </div></div>
 <div class="sheet" id="sheet"><div class="box"><h3>Saha notu</h3><p id="tipText"></p><p class="hint">Bu not yalnızca saha personeli içindir.</p><button class="btn small" id="tipClose" type="button">Kapat</button></div></div>
+<div class="sheet" id="setSheet"><div class="box" id="setBox"></div></div>
 <div class="lb2" id="lb"><img id="lbImg" alt=""></div>
 <div class="toast" id="toast"></div>
 
 <script>
 {
 const RATE=7;
+const KAYIT_ADRESI='';
 const STEPS=[
- {k:'start',t:'Başlangıç',tip:"Önce uygunluk sorun: “Beş dakikanız var mı?” İçeride kuyruk ya da telaş varsa sunuma başlamayın; uygun saati öğrenip çıkın. %7 başlangıç yılı kampanyasıdır: kimlerin yararlanacağını ve ne kadar süreceğini yazılı koşullardan söyleyin, tahmin yürütmeyin."},
+ {k:'start',t:'Başlangıç',tip:"Önce uygunluk sorun: “Beş dakikanız var mı?” Yoğunsa uygun saati öğrenip çıkın. %7 başlangıç yılı kampanyasıdır: kimlerin yararlanacağını ve ne kadar süreceğini yazılı koşullardan söyleyin, tahmin yürütmeyin."},
  {k:'tanis',t:'Tanışalım',tip:"Ekranı esnafa dönük tutun, telefonu yüzüne uzatmayın. Cevapları birlikte işaretleyin; mevcut düzenini küçümsemeyin."},
- {k:'dert',t:'Sıkıntılar',tip:"Esnaf bir derdini anlatıyorsa sunumu durdurun ve dinleyin. O bilgi her özellikten daha değerlidir."},
- {k:'kiyas',t:'Kıyaslayalım',tip:"Rakamları esnaf söylesin. Rakip platform adı anmayın, onların oranı hakkında iddiada bulunmayın. Ödeme kesintisinin %7'ye dâhil olmadığını mutlaka söyleyin."},
+ {k:'dert',t:'Sıkıntılar',tip:"Esnaf bir derdini anlatıyorsa sunumu durdurun ve dinleyin. Kendi cümlesini “Esnafın sözleri” alanına olduğu gibi yazın; bu kayıt raporlarda en değerli bilgidir."},
+ {k:'bek',t:'Beklentiler',tip:"Beklentiyi siz önermeyin, esnaf söylesin. Karşılayamayacağımız bir beklentiye söz vermeyin; sadece kaydedin."},
+ {k:'kiyas',t:'Kıyaslayalım',tip:"Rakamları esnaf söylesin. Rakip platform adı anmayın, oranları hakkında iddiada bulunmayın. Ödeme kesintisinin %7'ye dâhil olmadığını mutlaka söyleyin."},
  {k:'nasil',t:'Nasıl çalışır',tip:"recep.lezjet.com örnek mağazasını önceden açın. İnternet giderse bu ekran görüntüleriyle devam edin."},
- {k:'fayda',t:'Size faydası',tip:"Önce esnafın seçtiği dertlere odaklanın. Tüm özellik listesini okumayın; ilgi gösterdiği konuyu açın."},
+ {k:'fayda',t:'Çözümler',tip:"Her sıkıntının cevabını okuyun ve esnafın tepkisini işaretleyin: ikna oldu, kararsız, ikna olmadı. Hangi çözümün işe yaradığını bu kayıtlardan öğreneceğiz."},
  {k:'maliyet',t:'Tüm maliyetler',tip:"“Sadece %7, başka hiçbir masraf yok” demeyin. Tam tabloyu gösterin."},
- {k:'soru',t:'Sorularınız',tip:"Bilmediğiniz soruda tahmin yürütmeyin. Soruyu kaydedin, dönüş tarihi ve kanalı verin. Yetkiniz dışında indirim vaat etmeyin."},
- {k:'basla',t:'Başlayalım',tip:"Her ziyaret tarihli, net bir sonraki adımla biter. Kaydı işletmeden çıkar çıkmaz tamamlayın. Karar için baskı yapmayın."}
+ {k:'soru',t:'Sorular',tip:"Esnafın sorduğu her soruyu “Bu soru soruldu” ile işaretleyin. Bilmediğiniz soruda tahmin yürütmeyin; kaydedin, dönüş tarihi verin. Yetkiniz dışında indirim vaat etmeyin."},
+ {k:'basla',t:'Sonuç ve kayıt',tip:"Her ziyaret tarihli, net bir sonraki adımla biter. Kaydı işletmeden çıkar çıkmaz tamamlayın. Telefon numarasını yalnızca esnaf onay verirse kaydedin."}
 ];
 const TUR=['Lokanta / restoran','Kafe / pastane','Fırın / kahvaltıcı','Market / şarküteri','Kasap / manav','Diğer perakende'];
 const KANAL=['Sipariş platformu','Telefon','WhatsApp','Kendi sitem','Online satışım yok'];
@@ -181,23 +194,25 @@ const PAINS=[
  {id:'tel',t:'Telefonda eksik, yanlış sipariş oluyor',a:"“Yanına ne olsun?” sorusunu sistem müşteriye kendisi sorar; zorunlu seçimler yapılmadan ürün sepete eklenmez. Müşteri hazır olma saatini görür."},
  {id:'kur',t:'Kuryem yok ya da kurye pahalı',a:"Gel-al siparişiyle başlayabilirsiniz. Kuryenizi siz seçersiniz: kendi kuryeniz veya dilediğiniz kurye firması."},
  {id:'site',t:'Kendi sitem pahalı, bakımı zor',a:"Sabit yazılım ve bakım ücreti ödemezsiniz. Kendi alan adınızla çalışan hazır bir mağazanız olur; yalnızca alan adının yıllık bedeli size aittir."},
- {id:'yeni',t:'Yeni müşteriye ulaşamıyorum',a:"İki kanaldan satış yaparsınız: kendi mağazanız ve lezjet.com ortak platformu. Bu bir sipariş garantisi değildir."},
+ {id:'yeni',t:'Yeni müşteriye ulaşamıyorum',a:"İki kanaldan satış yaparsınız: kendi mağazanız ve lezjet.com ile LezJet uygulaması, orada müşteriler sizi haritadan ve kategoriden bulabilir. Bu bir sipariş garantisi değildir."},
  {id:'vak',t:'Uğraşacak vaktim yok',a:"Mağazanızı birlikte kuruyoruz. Günlük siparişleri tek ekrandan, telefondan bile yönetirsiniz."},
- {id:'yab',t:'Yabancı ya da turist müşterim var',a:"Mağaza Türkçe, İngilizce, Almanca ve Fransızca çalışır."}
+ {id:'yab',t:'Yabancı ya da turist müşterim var',a:"Mağaza Türkçe, İngilizce, Almanca ve Fransızca çalışır."},
+ {id:'nakit',t:'Müşterim kartla ya da nakit ödemek istiyor',a:"Müşteri Visa, MasterCard ile iyzico altyapısı üzerinden online öder; isterseniz nakit ödeme seçeneğini de açarsınız."}
 ];
+const BEK=['Daha fazla müşteri','Daha düşük maliyet','Kendi markamla satmak','Kolay kullanım','Hızlı ödeme ve para aktarımı','Kurye ve teslimat çözümü','Reklam ve tanıtım desteği','Eğitim ve teknik destek','Kampanya ve sadakat araçları','Satış raporları'];
 const FEAT=[
  ['Kendi alan adınız, kendi markanız','Müşteri başka bir platformun değil, sizin adınızı ve logonuzu görür.'],
- ['İki kanaldan satış','Kendi mağaza adresiniz ve lezjet.com ortak platformu ile mobil uygulama.'],
+ ['İki kanaldan satış','Kendi mağaza adresiniz ile lezjet.com ve LezJet uygulaması.'],
  ['Aylık sabit ücret 0 TL','Başlangıç yılı kampanyasıyla LezJet yalnızca gerçekleşen satıştan %7 alır.'],
  ['Kuryenizi siz seçin','Kendi kuryeniz, dilediğiniz kurye firması ya da gel-al.'],
- ['Güvenli online ödeme','Visa ve MasterCard ile iyzico altyapısı. Nakit seçeneği de açılabilir.'],
+ ['Online ya da nakit ödeme','Visa ve MasterCard ile iyzico altyapısı; isterseniz nakit.'],
  ['Damga kartı ve indirim kodu','Sadakat programını ve kampanyanızı siz tasarlarsınız.'],
  ['Doğru sipariş','Garnitür gibi zorunlu seçimleri sistem müşteriye sorar.'],
  ['Alerjen ve içerik bilgisi','Her üründe içerik ve alerjen görünür; telefonla sorulmaz.'],
  ['Vitrin sizin elinizde','Bayramda, sezonda, yeni üründe tanıtım alanını kendiniz değiştirirsiniz.'],
  ['Raporlar','Gelir, sipariş, en çok satan ürün ve müşteri raporları.'],
  ['Müşteri yorumları','Müşterinin ne düşündüğünü doğrudan görürsünüz.'],
- ['Hikâyeniz','Hakkımızda sayfasında işletmenizi kendi sözlerinizle anlatırsınız.']
+ ['Sipariş takibi','Müşteri siparişini uygulamadan takip eder, “nerede kaldı” diye aramaz.']
 ];
 const SHOTS=[
  ['s3','Sizin mağazanız','Logo, menü, arama, kategoriler ve ürün kartları. Üstü çizili eski fiyatla kampanyanızı gösterirsiniz.','Sizin mağazanız da kendi adınız ve logonuzla böyle görünür.'],
@@ -212,48 +227,51 @@ const SHOTS=[
 const QA=[
  ['Zaten bir platformdayım. Onu bırakmam mı gerekiyor?',"Hayır. LezJet'e ek bir kanal olarak başlayabilirsiniz. Fark şu: kendi alan adınız, kendi markanız, müşteri ilişkisinin sizde kalması ve reklamınızı kendi adresinize yönlendirebilmeniz."],
  ['%7 de bir kesinti, neden ödeyeyim?',"Aylık sabit yazılım ücreti yok; satış olmayan ayda LezJet'e bir şey ödemezsiniz. Kendi rakamlarınızla “Kıyaslayalım” bölümünde hesapladık. Ödeme kesintisi ve alan adı bedeli ayrı kalemdir, “Tüm maliyetler” bölümünde hepsi açıkça yazıyor.",'kiyas'],
+ ['%7 ne kadar geçerli?',"%7, başlangıç yılında LezJet'e katılan işletmelere özel bir kampanyadır. Süresi ve koşulları size yazılı olarak iletilir."],
  ['Sipariş geleceği ne malum?',"Kesin sipariş sözü vermiyoruz. Birkaç ay deneyin; satış olmazsa sabit yazılım faturası ödemezsiniz. Alan adı bedeli bunun dışındadır."],
  ['Kuryem yok, ne yapacağım?',"Gel-al siparişiyle başlayabilirsiniz. Teslimat yapmak isterseniz kuryenizi siz seçersiniz. LezJet kurye sağlamaz."],
  ['Uğraşacak vaktim yok.',"Kurulumu birlikte yapıyoruz. Siparişleri tek ekrandan yönetirsiniz; siparişleri kim takip edecekse eğitimi ona birlikte veriyoruz."],
  ['Kendi sitemi yaptırsam olmaz mı?',"Olur; ama kendi sitenizin sabit yazılım, bakım ve ödeme altyapısı maliyeti olur. LezJet'te de mağazanız kendi alan adınızla çalışır, sabit ücret yoktur. Aldığınız teklifi “Kıyaslayalım” bölümüne girip karşılaştırabiliriz.",'kiyas'],
- ['Ödemeler nasıl alınıyor, güvenli mi?',"Ödemeler Visa ve MasterCard ile iyzico altyapısı üzerinden alınır. LezJet, 6563 sayılı Kanun kapsamında hizmet veren, ETBİS kayıtlı bir platformdur; kişisel veriler KVKK'ya uygun işlenir. Şirket bilgileri ve yasal sayfalar lezjet.com'un alt kısmında yer alır."],
+ ['Ödemeler nasıl alınıyor, güvenli mi?',"Müşteri Visa ve MasterCard ile iyzico altyapısı üzerinden öder; isterseniz nakit seçeneği de açılır. Yasal sayfalar (Kullanım Koşulları, Mesafeli Satış Sözleşmesi, Gizlilik Politikası) lezjet.com'un alt kısmında yer alır."],
+ ['Para hesabıma ne zaman geçer?',"Ödeme aktarım süresi ve koşulları size yazılı olarak iletilir. Bu sorunun cevabını teyit edip size döneceğiz."],
  ['Alan adı nedir, ücretini kime ödüyorum?',"Alan adı, mağazanızın internet adresidir (örneğin işletmeniz.com). Yıllık kayıt ve yenileme bedeli alan adı kayıt firmasına ödenir ve size aittir."],
- ['%7 ne kadar geçerli?',"%7, başlangıç yılında LezJet'e katılan işletmelere özel bir kampanyadır. Süresi ve koşulları size yazılı olarak iletilir."],
+ ['Müşteri beni nasıl bulacak?',"Kendi adresinizi sosyal medyada, pakette ve kasada paylaşırsınız. Ayrıca lezjet.com ve LezJet uygulamasında müşteriler sizi haritadan ve kategoriden bulabilir."],
  ['Ne zaman satışa başlarım?',"Bilgileriniz tamamlandıktan sonra mağazanız hazırlanır, size gösterilir ve onayınızla birlikte kullanıma başlarız. Kesin günü bilgiler tamamlanınca birlikte belirleriz."]
 ];
-const NEXT=['Mağaza kurulumu başlasın','Tekrar görüşme','Koşullar yazılı gönderilsin','Canlı gösterim yapılsın','Şimdilik olumsuz'];
-const ILGI=['Ücret ve maliyet','Kendi alan adı ve marka','Müşteri ilişkisi','Kampanya ve sadakat','Kurye ve gel-al','Kampanya oranı','Panel ve kullanım'];
+const SONUC=['Yetkiliye ulaşılamadı','Tanışma yapıldı','Değerlendirmede','Aktifleştirmede','Şimdilik olumsuz'];
+const NEXT=['Mağaza kurulumu başlasın','Tekrar görüşme','Koşullar yazılı gönderilsin','Canlı gösterim yapılsın','Takip gerekmiyor'];
+const ILGI=['Ücret ve maliyet','Kendi alan adı ve marka','Müşteri ilişkisi','Kampanya ve sadakat','Kurye ve gel-al','Panel ve kullanım','Kampanya oranı'];
+const TEPKI={ikna:'İkna oldu',kararsiz:'Kararsız',hayir:'İkna olmadı'};
+const HEAD=['Kayıt ID','Kayıt zamanı','Personel','İşletme','Yetkili','Görevi','Telefon','İlçe / mahalle','İşletme türü','Sipariş kanalları','Kurye','Aylık online satış (TL)','Mevcut kesinti (%)','Mevcut sabit ücret (TL)','Ödeme kesintisi (%)','Mevcut aylık maliyet (TL)','LezJet aylık maliyet (TL)','Aylık fark (TL)','Şikâyetler','Diğer şikâyet','Esnafın sözleri','Beklentiler','Diğer beklenti','İkna olduğu çözümler','Kararsız kaldığı çözümler','İkna olmadığı çözümler','Sorduğu sorular','Cevabı teyit edilecek soru','İlgi çeken konular','İlgi derecesi (1-5)','Ziyaret sonucu','Olumsuz gerekçesi','Sonraki adım','Sonraki adım tarihi','Kanal ve sorumlu','İletişim onayı','Personel notu'];
 
-const blank=()=>({isletme:'',yetkili:'',tel:'',tur:'',kanal:[],kurye:'',dert:[],ciro:'',oran:'',sabit:'',odeme:'',odemeMevcut:false,alan:'1500',site:'',ilgi:[],acik:'',sonraki:'',tarih:'',kanalDonus:'',not:''});
-let S=blank(),step=0,shotTab='ekran';
-const LS='lezjet-saha-v1';
-try{const d=JSON.parse(localStorage.getItem(LS+'-draft')||'null');if(d){S=Object.assign(blank(),d.S);step=d.step||0}}catch(e){}
-const save=()=>{try{localStorage.setItem(LS+'-draft',JSON.stringify({S,step}))}catch(e){}};
-const visits=()=>{try{return JSON.parse(localStorage.getItem(LS+'-visits')||'[]')}catch(e){return []}};
-const setVisits=v=>{try{localStorage.setItem(LS+'-visits',JSON.stringify(v))}catch(e){}};
+const blank=()=>({id:'',isletme:'',yetkili:'',gorev:'',bolge:'',tel:'',tur:'',kanal:[],kurye:'',dert:[],dertDiger:'',soz:'',bek:[],bekDiger:'',tepki:{},soruldu:[],ciro:'',oran:'',sabit:'',odeme:'',odemeMevcut:false,alan:'1500',site:'',ilgi:[],acik:'',derece:'',sonuc:'',gerekce:'',sonraki:'',tarih:'',kanalDonus:'',onay:false,pnot:''});
+let S=blank(),step=0;
+const LS='lezjet-saha-v2';
+const ls={get:(k,d)=>{try{const v=localStorage.getItem(LS+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(LS+k,JSON.stringify(v))}catch(e){}}};
+const d0=ls.get('-draft',null);if(d0){S=Object.assign(blank(),d0.S);step=d0.step||0}
+let CFG=Object.assign({personel:'',url:KAYIT_ADRESI},ls.get('-cfg',{}));
+if(!CFG.url&&KAYIT_ADRESI)CFG.url=KAYIT_ADRESI;
+const save=()=>ls.set('-draft',{S,step});
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const n=v=>{const x=parseFloat(String(v||'').replace(/\./g,'').replace(',','.'));return isFinite(x)?x:0};
 const tl=v=>Math.round(v).toLocaleString('tr-TR')+' TL';
 const pc=v=>v.toLocaleString('tr-TR',{maximumFractionDigits:2});
 const $=id=>document.getElementById(id);
-const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1600)};
+const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2200)};
 const name=()=>S.isletme.trim()||'İşletmeniz';
 
-function calc(){
- const C=n(S.ciro),r=n(S.oran),F=n(S.sabit),p=n(S.odeme),A=n(S.alan),W=n(S.site);
- const pay=C*p/100;
- const mev=C*r/100+F+(S.odemeMevcut?pay:0);
- const lez=C*RATE/100+pay+A/12;
- const site=W>0?W+pay+A/12:null;
+function calc(v){
+ v=v||S;const C=n(v.ciro),r=n(v.oran),F=n(v.sabit),p=n(v.odeme),A=n(v.alan),W=n(v.site);
+ const pay=C*p/100,mev=C*r/100+F+(v.odemeMevcut?pay:0),lez=C*RATE/100+pay+A/12,site=W>0?W+pay+A/12:null;
  return {C,r,F,p,A,W,pay,mev,lez,site,hasMev:r>0||F>0};
 }
 
-const chips=(key,list,multi)=>`<div class="chips">${list.map(x=>{const on=multi?S[key].includes(x):S[key]===x;return `<button type="button" class="chip${on?' on':''}" data-chip="${key}" data-multi="${multi?1:0}" data-v="${esc(x)}">${esc(x)}</button>`}).join('')}</div>`;
-const field=(key,label,hint,unit,type)=>`<label class="f" for="f-${key}">${label}${hint?` <span class="hint">${hint}</span>`:''}</label>`+(unit?`<div class="num"><input id="f-${key}" type="text" inputmode="decimal" data-k="${key}" value="${esc(S[key])}" placeholder="0"><span>${unit}</span></div>`:`<input id="f-${key}" type="${type||'text'}" data-k="${key}" value="${esc(S[key])}">`);
+const chips=(key,list,multi)=>`<div class="chips" id="c-${key}">${list.map(x=>{const on=multi?S[key].includes(x):S[key]===x;return `<button type="button" class="chip${on?' on':''}" data-chip="${key}" data-multi="${multi?1:0}" data-v="${esc(x)}">${esc(x)}</button>`}).join('')}</div>`;
+const field=(key,label,hint,unit,type)=>`<label class="f" for="f-${key}">${label}${hint?` <span class="hint">${hint}</span>`:''}</label>`+(unit?`<div class="num"><input id="f-${key}" type="text" inputmode="decimal" data-k="${key}" value="${esc(S[key])}" placeholder="0"><span>${unit}</span></div>`:(type==='area'?`<textarea id="f-${key}" data-k="${key}">${esc(S[key])}</textarea>`:`<input id="f-${key}" type="${type||'text'}" data-k="${key}" value="${esc(S[key])}">`));
 
 const V={
 start:()=>`<section class="hero">
-  <p style="font-weight:700;color:#ffb98c;margin-bottom:6px">Yerel güç, dijital gelecek</p>
+  <p style="font-weight:700;color:#ffb98c;margin-bottom:6px">Yakınlardan lezzetler, kendi markanızla</p>
   <h1>${esc(name())} için dijital mağaza hazır.</h1>
   <p>Kendi alan adınız. Kendi markanız. Kendi müşteriniz.</p>
   <div class="camp">Başlangıç yılına özel kampanya</div>
@@ -262,9 +280,9 @@ start:()=>`<section class="hero">
   <div class="row"><div><b>0 TL</b>aylık sabit yazılım ücreti</div><div><b>2 kanal</b>kendi mağazanız ve lezjet.com</div><div><b>Siz seçin</b>kurye, kampanya, fiyat</div></div>
  </section>
  <div class="card"><h3>Birkaç dakikada birlikte bakalım</h3>
- <p class="lead">Önce işletmenizi tanıyacağız, sonra yaşadığınız sıkıntıları konuşacağız ve kendi rakamlarınızla bir kıyaslama yapacağız.</p>
- ${field('isletme','İşletmenin adı')}${field('yetkili','Görüştüğümüz kişi','adı ve görevi')}
- <button class="btn mt" type="button" data-go="1" style="width:100%">Başlayalım</button></div>
+ <p class="lead">Önce işletmenizi tanıyacağız, yaşadığınız sıkıntıları ve beklentilerinizi konuşacağız, sonra kendi rakamlarınızla bir kıyaslama yapacağız.</p>
+ ${field('isletme','İşletmenin adı <span class="req">*</span>')}${field('yetkili','Görüştüğümüz kişi')}${field('gorev','Görevi','sahibi, müdür, çalışan')}${field('bolge','İlçe / mahalle')}
+ <button class="btn wide mt" type="button" data-go="1">Başlayalım</button></div>
  <p class="note">Ödeme altyapısı kesintisi, alan adı bedeli ve kurye maliyeti %7'nin dışındadır; tamamı “Tüm maliyetler” bölümünde.</p>`,
 
 tanis:()=>`<h2>İşletmenizi tanıyalım</h2><p class="lead">Size uygun anlatabilmemiz için birkaç kısa soru.</p>
@@ -272,42 +290,49 @@ tanis:()=>`<h2>İşletmenizi tanıyalım</h2><p class="lead">Size uygun anlatabi
  <label class="f">Bugün online siparişi nasıl alıyorsunuz? <span class="hint">birden fazla seçilebilir</span></label>${chips('kanal',KANAL,1)}
  <label class="f">Paket servis için kuryeniz var mı?</label>${chips('kurye',KURYE)}</div>`,
 
-dert:()=>`<h2>Sizi en çok ne yoruyor?</h2><p class="lead">Yaşadığınız sıkıntıları işaretleyin. Her birine LezJet'in cevabını birazdan göstereceğiz.</p>
+dert:()=>`<h2>Sizi en çok ne yoruyor?</h2><p class="lead">Yaşadığınız sıkıntıları işaretleyin. Her birine LezJet'in çözümünü birazdan göstereceğiz.</p>
  <div class="pains">${PAINS.map(p=>`<button type="button" class="pain${S.dert.includes(p.id)?' on':''}" data-pain="${p.id}"><span class="bx">${S.dert.includes(p.id)?'✓':''}</span>${esc(p.t)}</button>`).join('')}</div>
- ${field('not','Kendi sözleriyle temel ihtiyacı','esnafın ifadesiyle not edin','', 'text')}`,
+ <div class="card">${field('dertDiger','Listede olmayan başka bir sıkıntı','','','area')}${field('soz','Esnafın kendi sözleri','ne dediyse olduğu gibi yazın','','area')}</div>`,
 
-kiyas:()=>{const c=calc();return `<h2>Kendi rakamlarınızla kıyaslayalım</h2><p class="lead">Rakamları siz söyleyin, hesabı birlikte görelim.</p>
- <div id="resBox">${resHTML(c)}</div>
+bek:()=>`<h2>LezJet'ten ne bekliyorsunuz?</h2><p class="lead">Sizin için neyin önemli olduğunu bilmek istiyoruz.</p>
+ <div class="card"><label class="f">Beklentileriniz <span class="hint">birden fazla seçilebilir</span></label>${chips('bek',BEK,1)}
+ ${field('bekDiger','Başka beklentiniz','','','area')}</div>`,
+
+kiyas:()=>`<h2>Kendi rakamlarınızla kıyaslayalım</h2><p class="lead">Rakamları siz söyleyin, hesabı birlikte görelim.</p>
+ <div id="resBox">${resHTML(calc())}</div>
  <div class="card">
  ${field('ciro','Aylık online satışınız','yaklaşık','TL')}
  ${field('oran','Şu an satıştan kesilen pay','kullandığınız kanalın oranı; yoksa boş bırakın','%')}
  ${field('sabit','Şu an ödediğiniz aylık sabit ücretler','abonelik, zorunlu reklam vb.','TL')}
- ${field('odeme','Ödeme altyapısı kesintisi','güncel iyzico oranı; %7\'ye dâhil değildir','%')}
- <label class="f" style="display:flex;gap:10px;align-items:center;font-weight:600"><input type="checkbox" id="f-om" ${S.odemeMevcut?'checked':''} style="width:24px;height:24px"> Bu kesintiyi şu anki kanalımda da ayrıca ödüyorum</label>
+ ${field('odeme','Ödeme altyapısı kesintisi',"güncel iyzico oranı; %7'ye dâhil değildir",'%')}
+ <label class="check"><input type="checkbox" id="f-om" ${S.odemeMevcut?'checked':''}> Bu kesintiyi şu anki kanalımda da ayrıca ödüyorum</label>
  ${field('alan','Alan adı yıllık bedeli','size aittir','TL')}
  ${field('site','Kendi sitem için aldığım aylık teklif','isteğe bağlı','TL')}
- </div>`},
+ </div>`,
 
 nasil:()=>`<h2>Nasıl çalışır?</h2><p class="lead">Müşteri size iki yoldan ulaşır, sipariş doğrudan sizin panelinize düşer.</p>
  <div class="flow card">
   <div class="two"><div class="node n">Kendi adresiniz<small>Sosyal medya, paket, kasa ve reklamlarınızdan gelen müşteri</small></div>
-  <div class="node n">lezjet.com ve uygulama<small>Platformda sizi keşfeden müşteri</small></div></div>
+  <div class="node n">lezjet.com ve uygulama<small>Sizi haritadan ve kategoriden keşfeden müşteri</small></div></div>
   <div class="arr">↓</div>
   <div class="node o">${esc(name())} mağazası<small>Kendi adınız, logonuz, menünüz ve fiyatlarınız</small></div>
   <div class="arr">↓</div>
-  <div class="node">Sipariş ve güvenli ödeme<small>iyzico altyapısı, isterseniz nakit</small></div>
+  <div class="node">Sipariş ve ödeme<small>Online (Visa, MasterCard, iyzico) ya da nakit</small></div>
   <div class="arr">↓</div>
   <div class="node">Sizin paneliniz<small>Siparişi görür, onaylar, hazırlarsınız</small></div>
   <div class="arr">↓</div>
-  <div class="node">Teslimat veya gel-al<small>Kendi kuryeniz ya da seçtiğiniz kurye firması</small></div>
+  <div class="node">Teslimat veya gel-al<small>Müşteri siparişini uygulamadan takip eder</small></div>
  </div>
  <h3 class="mt">Ekranlar</h3>
- <div class="gal" id="gal">${SHOTS.map(s=>`<figure><img src="img/${s[0]}.jpg" alt="${esc(s[1])}" loading="lazy" data-zoom="img/${s[0]}.jpg"><figcaption><h3>${esc(s[1])}</h3>${s[2]?`<p class="hint" style="margin:0">${esc(s[2])}</p><q>${esc(s[3])}</q>`:''}</figcaption></figure>`).join('')}</div>
+ <div class="gal" id="gal">${SHOTS.map(s=>`<figure><img src="img/${s[0]}.jpg" alt="${esc(s[1])}" loading="lazy" data-zoom="img/${s[0]}.jpg"><figcaption><h3>${esc(s[1])}</h3><p class="hint" style="margin:0">${esc(s[2])}</p><q>${esc(s[3])}</q></figcaption></figure>`).join('')}</div>
  <div class="galnav"><button class="btn ghost small" type="button" data-gal="-1">Önceki</button><span class="hint">Büyütmek için resme dokunun</span><button class="btn ghost small" type="button" data-gal="1">Sonraki</button></div>
- <p class="note">Canlı örnek: recep.lezjet.com</p>`,
+ <div class="card"><h3>Müşteriniz ne görür?</h3>
+ <p class="hint" style="margin:0">Haritadan adres seçer, yakınındaki işletmeleri ve kategorileri görür. Teslimat ya da gel-al seçer, online ya da nakit öder, siparişini uygulamadan takip eder. Türkçe, İngilizce, Almanca ve Fransızca kullanabilir.</p>
+ <div class="stores"><a href="https://apps.apple.com/tr/app/lezjet-tr/id6769927449?l=tr" target="_blank" rel="noopener">App Store</a><a href="https://play.google.com/store/apps/details?id=com.fourunit.lezjet.customer&hl=tr" target="_blank" rel="noopener">Google Play</a></div>
+ <p class="note">Canlı örnek mağaza: recep.lezjet.com · Platform: lezjet.com</p></div>`,
 
-fayda:()=>{const sel=PAINS.filter(p=>S.dert.includes(p.id));return `<h2>${sel.length?'Sizin dertlerinize cevaplar':'LezJet size ne kazandırır?'}</h2>
- ${sel.length?sel.map(p=>`<div class="ans"><h3>${esc(p.t)}</h3><p>${esc(p.a)}</p></div>`).join(''):`<p class="lead">Sıkıntılar bölümünde seçim yapılmadı. Tüm faydalar aşağıda.</p>`}
+fayda:()=>{const sel=PAINS.filter(p=>S.dert.includes(p.id));return `<h2>${sel.length?'Sıkıntılarınıza çözümler':'LezJet size ne kazandırır?'}</h2>
+ ${sel.length?`<p class="lead">Her çözümden sonra ne düşündüğünüzü işaretleyelim.</p>`+sel.map(p=>`<div class="ans"><h3>${esc(p.t)}</h3><p>${esc(p.a)}</p><div class="react">${Object.entries(TEPKI).map(([k,l])=>`<button type="button" class="chip r-${k}${S.tepki[p.id]===k?' on':''}" data-react="${p.id}" data-v="${k}">${l}</button>`).join('')}</div></div>`).join(''):`<p class="lead">Sıkıntılar bölümünde seçim yapılmadı. Tüm faydalar aşağıda.</p>`}
  <h3 class="mt">${sel.length?'Ayrıca':'Öne çıkanlar'}</h3>
  <div class="feat">${FEAT.map(f=>`<div><h3>${esc(f[0])}</h3><p>${esc(f[1])}</p></div>`).join('')}</div>`},
 
@@ -322,66 +347,111 @@ maliyet:()=>`<h2>Tüm maliyetler, açık açık</h2><p class="lead">Neyi, kime �
  <div class="warn">Birkaç ay deneyin; satış olmazsa sabit yazılım faturası ödemezsiniz. Alan adı bedeli bunun dışındadır.</div>`,
 
 soru:()=>`<h2>Aklınıza takılanlar</h2><p class="lead">En sık sorulan sorular ve açık cevapları.</p>
- ${QA.map(q=>`<details><summary>${esc(q[0])}</summary><div><p>${esc(q[1])}</p>${q[2]?`<button class="btn ghost small" type="button" data-goto="${q[2]}">Bölüme git</button>`:''}</div></details>`).join('')}
- <div class="card"><label class="f" for="f-acik">Cevabını teyit edeceğimiz soru</label><textarea id="f-acik" data-k="acik" placeholder="Bilmediğiniz soruyu buraya yazın, dönüş tarihi verin">${esc(S.acik)}</textarea></div>`,
+ ${QA.map((q,i)=>{const a=S.soruldu.includes(q[0]);return `<details class="${a?'asked':''}"><summary>${esc(q[0])}</summary><div><p>${esc(q[1])}</p><div class="chips"><button class="chip${a?' on':''}" type="button" data-ask="${i}">${a?'✓ Bu soru soruldu':'Bu soru soruldu'}</button>${q[2]?`<button class="btn ghost small" type="button" data-goto="${q[2]}">Bölüme git</button>`:''}</div></div></details>`}).join('')}
+ <div class="card">${field('acik','Cevabını teyit edeceğimiz soru','bilmediğiniz soruyu yazın, dönüş tarihi verin','','area')}</div>`,
 
-basla:()=>{const vs=visits();return `<h2>Nasıl başlarız?</h2>
+basla:()=>`<h2>Nasıl başlarız?</h2>
  <div class="card"><ol class="steplist">
- <li><b>Koşullar</b><br><span class="hint">Ücret ve kesintiler size yazılı iletilir.</span></li>
+ <li><b>Koşullar</b><br><span class="hint">Ücret, kampanya ve kesintiler size yazılı iletilir.</span></li>
  <li><b>Bilgileriniz</b><br><span class="hint">Menü, fiyat, görsel, çalışma saatleri tek listede istenir.</span></li>
  <li><b>Mağazanız hazırlanır</b><br><span class="hint">Logonuz, renkleriniz, alan adınız.</span></li>
  <li><b>Onayınız</b><br><span class="hint">Yayına geçmeden mağazayı size gösteririz.</span></li>
  <li><b>Kullanıma başlarız</b><br><span class="hint">Bir deneme siparişini baştan sona birlikte yaparız.</span></li>
  <li><b>İlk 30 gün yanınızdayız</b><br><span class="hint">İlk siparişler, tanıtım, değerlendirme görüşmesi.</span></li></ol></div>
- <h2 class="mt">Ziyaret kaydı</h2>
+ <h2 class="mt">Ziyaret sonucu</h2><p class="hint">Bu bölümü personel doldurur.</p>
  <div class="card">
- <label class="f">En çok ilgi çeken konu</label>${chips('ilgi',ILGI,1)}
+ <label class="f">Ziyaret sonucu <span class="req">*</span></label>${chips('sonuc',SONUC)}
+ <label class="f">İlgi derecesi <span class="hint">1 hiç ilgilenmedi, 5 çok ilgili</span></label>${chips('derece',['1','2','3','4','5'])}
+ <label class="f">En çok ilgi çeken konular</label>${chips('ilgi',ILGI,1)}
+ ${field('gerekce','Olumsuzsa gerekçesi','esnafın söylediği sebep','','area')}
  <label class="f">Sonraki adım</label>${chips('sonraki',NEXT)}
- ${field('tarih','Tarih','', '', 'date')}
+ ${field('tarih','Sonraki adım tarihi','','','date')}
  ${field('kanalDonus','Kanal ve sorumlu','örn. telefonla, Ahmet')}
- ${field('tel','İşletme telefonu','isteğe bağlı','', 'tel')}
- <div class="chips mt"><button class="btn" type="button" id="saveV">Kaydı sakla</button><button class="btn ghost" type="button" id="shareV" hidden>Paylaş</button><button class="btn ghost" type="button" id="copyV">Özeti kopyala</button><button class="btn ghost" type="button" id="newV">Yeni ziyaret</button></div>
- <p class="note">Kayıtlar yalnızca bu telefonda tutulur. Ekibe iletmek için özeti kopyalayıp mesaj olarak gönderin.</p></div>
- <h3 class="mt">Kayıtlı ziyaretler (${vs.length})</h3>
- <div class="card" style="padding:4px 16px">${vs.length?vs.map((v,i)=>`<div class="visit"><div><b>${esc(v.isletme||'Adsız işletme')}</b>${esc(v.sonraki||'Sonraki adım yok')}${v.tarih?' · '+esc(v.tarih):''}</div><div class="chips"><button class="btn ghost small" type="button" data-vcopy="${i}">Kopyala</button><button class="btn ghost small" type="button" data-vdel="${i}">Sil</button></div></div>`).join(''):'<p class="hint" style="padding:12px 0;margin:0">Henüz kayıt yok.</p>'}</div>`}
+ ${field('tel','İşletme telefonu','','','tel')}
+ <label class="check"><input type="checkbox" id="f-onay" ${S.onay?'checked':''}> Esnaf, iletişim bilgilerinin LezJet tarafından kaydedilmesine ve kendisiyle iletişime geçilmesine onay verdi.</label>
+ ${field('pnot','Personel notu','','','area')}
+ <div id="sendInfo">${sendInfo()}</div>
+ <button class="btn wide mt" type="button" id="saveV">Kaydet ve gönder</button>
+ <div class="chips mt"><button class="btn ghost small" type="button" id="shareV" hidden>Paylaş</button><button class="btn ghost small" type="button" id="copyV">Özeti kopyala</button><button class="btn ghost small" type="button" id="newV">Kaydetmeden yeni ziyaret</button></div>
+ </div>`
 };
+
+function sendInfo(){
+ const q=ls.get('-queue',[]).length;
+ if(!CFG.personel)return `<div class="warn">Önce “Kayıtlar” düğmesinden adınızı yazın.</div>`;
+ if(!CFG.url)return `<div class="warn">Kayıt adresi girilmemiş. Kayıtlar bu telefonda saklanır, adres girilince gönderilir.</div>`;
+ return q?`<div class="warn">Gönderilmeyi bekleyen ${q} kayıt var. İnternet gelince otomatik gönderilir.</div>`:`<div class="okbox">Kayıt, LezJet kayıt tablosuna gönderilecek.</div>`;
+}
 
 function resHTML(c){
  if(!c.C) return `<div class="res"><div class="verdict">Aylık online satışınızı yazın, hesap burada görünsün.</div><p class="hint" style="margin:0">Online satışınız yoksa tahmini bir rakamla deneyin. LezJet'te satış olmayan ayda sabit yazılım ücreti ödemezsiniz.</p></div>`;
  const rows=[];
  if(c.hasMev) rows.push(['Şu anki kanalınız',c.mev,'var(--soft)']);
- rows.push(['LezJet',c.lez,'var(--or)']);
+ rows.push(['LezJet (%7 kampanya)',c.lez,'var(--or)']);
  if(c.site!=null) rows.push(['Kendi siteniz',c.site,'var(--navy)']);
- const mx=Math.max(...rows.map(r=>r[1]),1);
- let verdict;
- if(c.hasMev){const d=c.mev-c.lez;verdict=d>=0?`Bu rakamlarla ayda <em>${tl(d)}</em> daha az ödersiniz.`:`Bu rakamlarla LezJet ayda <em class="neg">${tl(-d)}</em> daha fazla tutar.`}
- else verdict=`Ayda ${tl(c.C)} satışta LezJet'e giden toplam <em>${tl(c.lez)}</em>.`;
- const d=c.hasMev?c.mev-c.lez:0;
+ const mx=Math.max(...rows.map(r=>r[1]),1),d=c.hasMev?c.mev-c.lez:0;
+ const verdict=c.hasMev?(d>=0?`Bu rakamlarla ayda <em>${tl(d)}</em> daha az ödersiniz.`:`Bu rakamlarla LezJet ayda <em class="neg">${tl(-d)}</em> daha fazla tutar.`):`Ayda ${tl(c.C)} satışta LezJet'e giden toplam <em>${tl(c.lez)}</em>.`;
  return `<div class="res"><div class="verdict">${verdict}</div>
  <div class="cmp">${rows.map(r=>`<div><div class="lb"><span>${r[0]}</span><b>${tl(r[1])} / ay</b></div><div class="track"><i style="width:${Math.max(2,r[1]/mx*100)}%;background:${r[2]}"></i></div></div>`).join('')}</div>
- <div class="kv">
- ${c.hasMev?`<div><small>Yıllık fark</small><b>${d>=0?'':'−'}${tl(Math.abs(d*12))}</b></div>`:`<div><small>Her 100 TL satışta LezJet + ödeme</small><b>${pc(RATE+c.p)} TL</b></div>`}
- <div><small>Satış olmayan bir ayda LezJet</small><b>${tl(c.A/12)}</b></div>
- </div>
+ <div class="kv">${c.hasMev?`<div><small>Yıllık fark</small><b>${d>=0?'':'−'}${tl(Math.abs(d*12))}</b></div>`:`<div><small>Her 100 TL satışta LezJet + ödeme</small><b>${pc(RATE+c.p)} TL</b></div>`}
+ <div><small>Satış olmayan bir ayda LezJet</small><b>${tl(c.A/12)}</b></div></div>
  ${!c.p?`<div class="warn">Ödeme kesintisi oranı girilmedi; LezJet tarafı eksik görünüyor. Güncel oranı ekleyin.</div>`:''}
  <p class="note">LezJet satırı: %7 hizmet bedeli (başlangıç yılı kampanyası) + ödeme kesintisi + alan adının aylık payı. Kurye maliyeti iki tarafta da hesaba katılmadı. Hesap sizin verdiğiniz rakamlarla yapılır; sipariş garantisi değildir.</p></div>`;
 }
 
-function summary(v){
- const c=(()=>{const o=S;S=v;const r=calc();S=o;return r})();
- const dert=PAINS.filter(p=>v.dert.includes(p.id)).map(p=>p.t).join(', ');
- return [`LezJet ziyaret kaydı — ${v.isletme||'Adsız işletme'}`,
- `Kiminle: ${v.yetkili||'-'}${v.tel?' ('+v.tel+')':''}`,
- `İşletme: ${v.tur||'-'} | Kanallar: ${v.kanal.join(', ')||'-'} | Kurye: ${v.kurye||'-'}`,
- `Temel ihtiyaç: ${v.not||dert||'-'}`,
- dert&&v.not?`Seçilen sıkıntılar: ${dert}`:'',
- `İlgi çeken: ${v.ilgi.join(', ')||'-'}`,
- `Açık soru: ${v.acik||'-'}`,
- `Sonraki adım: ${v.sonraki||'-'}${v.tarih?' · '+v.tarih:''}${v.kanalDonus?' · '+v.kanalDonus:''}`,
- c.C?`Kıyas: aylık satış ${tl(c.C)}${c.hasMev?', mevcut '+tl(c.mev):''}, LezJet ${tl(c.lez)}`:''
- ].filter(Boolean).join('\n');
+const painT=id=>(PAINS.find(p=>p.id===id)||{}).t||id;
+function row(v){
+ const c=calc(v),now=new Date(),pad=x=>String(x).padStart(2,'0');
+ const tp=k=>Object.entries(v.tepki).filter(([id,r])=>r===k&&v.dert.includes(id)).map(([id])=>painT(id)).join(' | ');
+ const vals=[v.id,v.zaman||`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`,v.personel||CFG.personel,v.isletme,v.yetkili,v.gorev,v.onay?v.tel:'',v.bolge,v.tur,v.kanal.join(' | '),v.kurye,
+  c.C||'',c.r||'',c.F||'',c.p||'',c.C&&c.hasMev?Math.round(c.mev):'',c.C?Math.round(c.lez):'',c.C&&c.hasMev?Math.round(c.mev-c.lez):'',
+  v.dert.map(painT).join(' | '),v.dertDiger,v.soz,v.bek.join(' | '),v.bekDiger,tp('ikna'),tp('kararsiz'),tp('hayir'),v.soruldu.join(' | '),v.acik,v.ilgi.join(' | '),v.derece?+v.derece:'',v.sonuc,v.gerekce,v.sonraki,v.tarih,v.kanalDonus,v.onay?'Evet':'Hayır',v.pnot];
+ const o={};HEAD.forEach((h,i)=>o[h]=vals[i]);return o;
 }
+function summary(v){const r=row(v);return 'LezJet ziyaret kaydı\n'+HEAD.slice(1).filter(h=>r[h]!==''&&r[h]!=null).map(h=>`${h}: ${r[h]}`).join('\n')}
 async function copy(t){try{await navigator.clipboard.writeText(t);toast('Özet kopyalandı')}catch(e){toast('Kopyalanamadı')}}
+
+let syncing=false;
+async function sync(manual){
+ const q=ls.get('-queue',[]);updDot();
+ if(!q.length||!CFG.url||syncing){if(manual&&!CFG.url)toast('Kayıt adresi girilmemiş');return}
+ syncing=true;
+ try{
+  const r=await fetch(CFG.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(q.map(x=>x.row))});
+  const j=await r.json();
+  if(!j.ok)throw new Error(j.hata||'hata');
+  const ids=q.map(x=>x.id),vs=ls.get('-visits',[]);vs.forEach(v=>{if(ids.includes(v.id))v.gonderildi=true});
+  ls.set('-visits',vs);ls.set('-queue',ls.get('-queue',[]).filter(x=>!ids.includes(x.id)));
+  toast(q.length+' kayıt tabloya gönderildi');
+ }catch(e){if(manual)toast('Gönderilemedi. İnternet gelince tekrar denenecek.')}
+ syncing=false;updDot();refreshSet();if($('sendInfo'))$('sendInfo').innerHTML=sendInfo();
+}
+function updDot(){const q=ls.get('-queue',[]).length,d=$('qDot');d.hidden=!q;d.textContent=q}
+
+function saveVisit(){
+ const miss=[];if(!S.isletme.trim())miss.push(['isletme',0]);if(!S.sonuc)miss.push(['sonuc',STEPS.length-1]);
+ if(!CFG.personel){openSet();toast('Önce adınızı yazın');return}
+ if(miss.length){toast(miss[0][0]==='isletme'?'İşletme adı eksik':'Ziyaret sonucunu seçin');if(miss[0][1]!==step)go(miss[0][1]);setTimeout(()=>{const el=$('f-'+miss[0][0])||$('c-'+miss[0][0]);if(el){el.classList.add('need');el.scrollIntoView({block:'center'})}},50);return}
+ const v=JSON.parse(JSON.stringify(S));v.id='LJ'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase();v.personel=CFG.personel;
+ const r=row(v);v.zaman=r['Kayıt zamanı'];v.gonderildi=false;
+ const vs=ls.get('-visits',[]);vs.unshift(v);ls.set('-visits',vs.slice(0,300));
+ const q=ls.get('-queue',[]);q.push({id:v.id,row:r});ls.set('-queue',q);
+ S=blank();go(0);toast('Kayıt saklandı');sync(true);
+}
+
+function openSet(){refreshSet();$('setSheet').classList.add('on')}
+function refreshSet(){
+ const vs=ls.get('-visits',[]),q=ls.get('-queue',[]).length;
+ $('setBox').innerHTML=`<h3>Kayıtlar ve ayarlar</h3>
+ <label class="f" for="cfg-personel">Adınız soyadınız</label><input id="cfg-personel" type="text" value="${esc(CFG.personel)}">
+ <label class="f" for="cfg-url">Kayıt adresi <span class="hint">Google E-tablo web uygulaması adresi</span></label><input id="cfg-url" type="url" value="${esc(CFG.url)}" placeholder="https://script.google.com/macros/s/.../exec">
+ <div class="chips mt"><button class="btn small" type="button" id="cfgSave">Kaydet</button><button class="btn ghost small" type="button" id="cfgTest">Bağlantıyı dene</button></div>
+ <div class="${q?'warn':'okbox'}">${q?`Gönderilmeyi bekleyen ${q} kayıt var.`:'Bekleyen kayıt yok.'}</div>
+ ${q?`<button class="btn small mt" type="button" id="syncNow">Şimdi gönder</button>`:''}
+ <h3 class="mt" style="color:var(--ink)">Bu telefondaki ziyaretler (${vs.length})</h3>
+ ${vs.length?vs.map((v,i)=>`<div class="visit"><div><b>${esc(v.isletme)}<span class="tag ${v.gonderildi?'s':'w'}">${v.gonderildi?'Gönderildi':'Bekliyor'}</span></b>${esc(v.sonuc)} · ${esc(v.zaman||'')}</div><div class="chips"><button class="btn ghost small" type="button" data-vcopy="${i}">Kopyala</button><button class="btn ghost small" type="button" data-vdel="${i}">Sil</button></div></div>`).join(''):'<p class="hint">Henüz kayıt yok.</p>'}
+ <button class="btn ghost small mt" type="button" id="setClose">Kapat</button>`;
+}
 
 function render(){
  const k=STEPS[step].k;
@@ -389,48 +459,62 @@ function render(){
  $('steps').innerHTML=STEPS.map((s,i)=>`<button type="button" class="${i===step?'on':i<step?'done':''}" data-go="${i}">${s.t}</button>`).join('');
  $('prog').style.width=((step+1)/STEPS.length*100)+'%';
  $('back').style.visibility=step?'visible':'hidden';
- $('next').textContent=step===STEPS.length-1?'Başa dön':'İleri: '+STEPS[step+1].t;
+ const last=step===STEPS.length-1;$('next').textContent=last?'Kaydet ve gönder':'İleri: '+STEPS[step+1].t;
  $('tipText').textContent=STEPS[step].tip;
  const on=$('steps').querySelector('.on');if(on)on.scrollIntoView({inline:'center',block:'nearest'});
  const sh=$('shareV');if(sh&&navigator.share&&window.matchMedia('(display-mode: standalone)').matches)sh.hidden=false;
  save();
 }
 function go(i){step=Math.max(0,Math.min(STEPS.length-1,i));render();window.scrollTo(0,0)}
+const reCalc=()=>{if($('resBox'))$('resBox').innerHTML=resHTML(calc())};
 
 document.addEventListener('click',e=>{
  const t=e.target.closest('button,img');if(!t)return;
  const d=t.dataset;
  if(d.go!=null)return go(+d.go);
  if(d.goto)return go(STEPS.findIndex(s=>s.k===d.goto));
- if(d.chip){const k=d.chip;if(d.multi==='1'){S[k]=S[k].includes(d.v)?S[k].filter(x=>x!==d.v):[...S[k],d.v]}else S[k]=S[k]===d.v?'':d.v;
-  t.parentElement.querySelectorAll('.chip').forEach(b=>b.classList.toggle('on',d.multi==='1'?S[k].includes(b.dataset.v):S[k]===b.dataset.v));save();return}
+ if(d.chip){const k=d.chip,m=d.multi==='1';if(m)S[k]=S[k].includes(d.v)?S[k].filter(x=>x!==d.v):[...S[k],d.v];else S[k]=S[k]===d.v?'':d.v;
+  t.parentElement.classList.remove('need');t.parentElement.querySelectorAll('.chip').forEach(b=>b.classList.toggle('on',m?S[k].includes(b.dataset.v):S[k]===b.dataset.v));save();return}
  if(d.pain){S.dert=S.dert.includes(d.pain)?S.dert.filter(x=>x!==d.pain):[...S.dert,d.pain];const on=S.dert.includes(d.pain);t.classList.toggle('on',on);t.querySelector('.bx').textContent=on?'✓':'';save();return}
- if(d.tab){shotTab=d.tab;render();return}
+ if(d.react){S.tepki[d.react]=S.tepki[d.react]===d.v?'':d.v;t.parentElement.querySelectorAll('.chip').forEach(b=>b.classList.toggle('on',S.tepki[d.react]===b.dataset.v));save();return}
+ if(d.ask!=null){const q=QA[+d.ask][0];S.soruldu=S.soruldu.includes(q)?S.soruldu.filter(x=>x!==q):[...S.soruldu,q];const a=S.soruldu.includes(q);t.classList.toggle('on',a);t.textContent=(a?'✓ ':'')+'Bu soru soruldu';t.closest('details').classList.toggle('asked',a);save();return}
  if(d.gal){const g=$('gal');g.scrollBy({left:+d.gal*g.clientWidth,behavior:'smooth'});return}
  if(d.zoom){$('lbImg').src=d.zoom;$('lb').classList.add('on');return}
- if(d.vcopy!=null)return copy(summary(Object.assign(blank(),visits()[+d.vcopy])));
- if(d.vdel!=null){const v=visits();v.splice(+d.vdel,1);setVisits(v);render();return}
- if(t.id==='saveV'){const v=visits();v.unshift(JSON.parse(JSON.stringify(S)));setVisits(v);render();toast('Kayıt saklandı');return}
- if(t.id==='copyV')return copy(summary(S));
- if(t.id==='shareV'){navigator.share({title:'LezJet ziyaret kaydı',text:summary(S)}).catch(()=>{});return}
- if(t.id==='newV'){S=blank();go(0);toast('Yeni ziyaret');return}
+ if(d.vcopy!=null)return copy(summary(Object.assign(blank(),ls.get('-visits',[])[+d.vcopy])));
+ if(d.vdel!=null){const vs=ls.get('-visits',[]),v=vs[+d.vdel];if(!v.gonderildi&&!t.dataset.sure){t.dataset.sure=1;t.textContent='Gönderilmedi, yine de sil';return}vs.splice(+d.vdel,1);ls.set('-visits',vs);ls.set('-queue',ls.get('-queue',[]).filter(x=>x.id!==v.id));updDot();refreshSet();return}
+ switch(t.id){
+  case 'saveV':return saveVisit();
+  case 'copyV':return copy(summary(S));
+  case 'shareV':navigator.share({title:'LezJet ziyaret kaydı',text:summary(S)}).catch(()=>{});return;
+  case 'newV':if(!t.dataset.sure){t.dataset.sure=1;t.textContent='Bu ziyaret silinecek, emin misiniz?';return}S=blank();go(0);toast('Yeni ziyaret');return;
+  case 'cfgSave':CFG.personel=$('cfg-personel').value.trim();CFG.url=$('cfg-url').value.trim();ls.set('-cfg',CFG);toast('Ayarlar kaydedildi');sync();refreshSet();if($('sendInfo'))$('sendInfo').innerHTML=sendInfo();return;
+  case 'cfgTest':{const u=$('cfg-url').value.trim();if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(u)){toast('Adres https://script.google.com/... ile başlayıp /exec ile bitmeli');return}
+   fetch(u).then(r=>r.text()).then(x=>toast(x.includes('LezJet')?'Bağlantı çalışıyor':'Adres yanıt verdi ama LezJet servisi değil')).catch(()=>toast('Bağlanılamadı'));return}
+  case 'syncNow':return sync(true);
+  case 'setClose':$('setSheet').classList.remove('on');return;
+ }
 });
 $('lb').addEventListener('click',()=>$('lb').classList.remove('on'));
-$('next').addEventListener('click',()=>go(step===STEPS.length-1?0:step+1));
+$('next').addEventListener('click',()=>step===STEPS.length-1?saveVisit():go(step+1));
 $('back').addEventListener('click',()=>go(step-1));
 $('tipBtn').addEventListener('click',()=>$('sheet').classList.add('on'));
+$('setBtn').addEventListener('click',openSet);
 $('tipClose').addEventListener('click',()=>$('sheet').classList.remove('on'));
-$('sheet').addEventListener('click',e=>{if(e.target.id==='sheet')$('sheet').classList.remove('on')});
+for(const id of ['sheet','setSheet'])$(id).addEventListener('click',e=>{if(e.target.id===id)$(id).classList.remove('on')});
 document.addEventListener('input',e=>{
  const k=e.target.dataset.k;
- if(k){S[k]=e.target.value;save();if(STEPS[step].k==='kiyas')$('resBox').innerHTML=resHTML(calc());return}
- if(e.target.id==='f-om'){S.odemeMevcut=e.target.checked;save();$('resBox').innerHTML=resHTML(calc())}
+ if(k){S[k]=e.target.value;e.target.classList.remove('need');save();if(STEPS[step].k==='kiyas')reCalc();return}
 });
-document.addEventListener('change',e=>{if(e.target.id==='f-om'){S.odemeMevcut=e.target.checked;save();$('resBox').innerHTML=resHTML(calc())}});
-document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight'&&STEPS[step].k==='nasil'){$('gal').scrollBy({left:$('gal').clientWidth,behavior:'smooth'})}if(e.key==='ArrowLeft'&&STEPS[step].k==='nasil'){$('gal').scrollBy({left:-$('gal').clientWidth,behavior:'smooth'})}if(e.key==='Escape'){$('lb').classList.remove('on');$('sheet').classList.remove('on')}});
-render();
+document.addEventListener('change',e=>{
+ if(e.target.id==='f-om'){S.odemeMevcut=e.target.checked;save();reCalc()}
+ if(e.target.id==='f-onay'){S.onay=e.target.checked;save()}
+});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;const g=$('gal');if(g&&(e.key==='ArrowRight'||e.key==='ArrowLeft'))g.scrollBy({left:(e.key==='ArrowRight'?1:-1)*g.clientWidth,behavior:'smooth'});if(e.key==='Escape')document.querySelectorAll('.sheet,.lb2').forEach(x=>x.classList.remove('on'))});
+window.addEventListener('online',()=>sync());
+render();updDot();sync();
+if(!CFG.personel)setTimeout(openSet,400);
 }
 </script>
-<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}</script>
 </body>
 </html>
