@@ -170,7 +170,7 @@ details>div{padding:0 16px 16px}
 <script>
 {
 const RATE=7;
-const KAYIT_ADRESI='';
+const KAYIT_ADRESI='https://script.google.com/macros/s/AKfycby_-DliH0clUBzubCDzhPIrR7fqdzuZxwRzIaqBd9_xCy9m1syCsOVixpMYXyi9dNLG/exec';
 const STEPS=[
  {k:'start',t:'Başlangıç',tip:"Önce uygunluk sorun: “Beş dakikanız var mı?” Yoğunsa uygun saati öğrenip çıkın. %7 başlangıç yılı kampanyasıdır: kimlerin yararlanacağını ve ne kadar süreceğini yazılı koşullardan söyleyin, tahmin yürütmeyin."},
  {k:'tanis',t:'Tanışalım',tip:"Ekranı esnafa dönük tutun, telefonu yüzüne uzatmayın. Cevapları birlikte işaretleyin; mevcut düzenini küçümsemeyin."},
@@ -251,7 +251,7 @@ let S=blank(),step=0;
 const LS='lezjet-saha-v2';
 const ls={get:(k,d)=>{try{const v=localStorage.getItem(LS+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(LS+k,JSON.stringify(v))}catch(e){}}};
 const d0=ls.get('-draft',null);if(d0){S=Object.assign(blank(),d0.S);step=d0.step||0}
-let CFG=Object.assign({personel:'',url:KAYIT_ADRESI},ls.get('-cfg',{}));
+let CFG=Object.assign({personel:'',url:''},ls.get('-cfg',{}));
 if(!CFG.url&&KAYIT_ADRESI)CFG.url=KAYIT_ADRESI;
 const save=()=>ls.set('-draft',{S,step});
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
